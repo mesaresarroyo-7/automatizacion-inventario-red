@@ -1,0 +1,12 @@
+- id: WLC01
+  hostname: WLAN-Controller-01
+  tipo: wlan_controller
+  ip: 10.0.4.2
+  ubicacion: Piso-1
+  estado: activo
+- id: SW03
+  hostname: Switch-Nucleo-01
+  tipo: switch
+  ip: 10.0.1.1
+  ubicacion: Datacenter-Lima
+  estado: activo
