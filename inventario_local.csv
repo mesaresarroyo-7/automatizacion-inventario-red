@@ -1,4 +1,0 @@
-id,hostname,tipo,ip,ubicacion,estado
-AP1,ap-wifi-01,access_point,10.0.2.20,Piso-2,activo
-SW2,switch-acceso-02,switch,10.0.1.11,Piso-4,activo
-R2,router-borde-02,router,10.0.0.2,Datacenter-Arequipa,activo
