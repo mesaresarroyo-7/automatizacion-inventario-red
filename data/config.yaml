@@ -1,0 +1,15 @@
+# Configuracion centralizada del sistema
+api:
+  base_url: "https://httpbin.org"
+  endpoint_seguro: "/bearer"          # endpoint protegido: requiere token Bearer
+  endpoint_invalido: "/status/404"     # para demostrar el manejo del error 404
+  timeout: 10
+  verificar_ssl: true
+  auth:
+    tipo: "Bearer"                     # esquema de autenticacion (token Bearer)
+    token: "idat-devops-2026-token"    # token de demostracion
+sistema:
+  nombre: "DevOps Inventario de Red"
+  version: "1.0.0"
+  entorno: "laboratorio"
+  red: "Red Corporativa DevOps"
