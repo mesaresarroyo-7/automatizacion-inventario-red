@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+reporte_inventario.json
+*.log
+.venv/
