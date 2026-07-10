@@ -1,0 +1,5 @@
+[
+  {"id": "R1",  "hostname": "router-core-01",   "tipo": "router",   "ip": "10.0.0.1",   "ubicacion": "Datacenter-Lima",     "estado": "activo"},
+  {"id": "SW1", "hostname": "switch-acceso-01",  "tipo": "switch",   "ip": "10.0.1.10",  "ubicacion": "Piso-3",              "estado": "activo"},
+  {"id": "FW1", "hostname": "firewall-perimetral","tipo": "firewall", "ip": "10.0.0.254", "ubicacion": "Datacenter-Lima",     "estado": "mantenimiento"}
+]
