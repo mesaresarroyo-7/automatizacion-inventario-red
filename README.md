@@ -1,22 +1,22 @@
 # Automatización de Inventario de Red
 
-Proyecto práctico de la unidad didáctica **DevOps: Fundamentos** (IDAT).
-Automatiza la consulta y consolidación del inventario de dispositivos de red de
-la organización.
+Proyecto práctico de la unidad didáctica **DevOps: Fundamentos** (IDAT). Sistema modular que automatiza la consulta y consolidación del inventario de dispositivos de red, procesando datos locales en cuatro formatos (JSON, CSV, XML y YAML) y consumiendo un servicio externo mediante una **REST API sobre HTTPS con autenticación por token Bearer**.
 
-El script lee el inventario local en **cuatro formatos de datos**
-(JSON, CSV, XML y YAML), consume un **servicio externo mediante una REST API
-sobre HTTPS**, consolida ambos orígenes y genera un reporte unificado con
-totales por tipo y por estado.
-
-## Arquitectura
+## Estructura
 
 ```
-inventario_local.json ┐
-inventario_local.csv  ├─► scripts/devops_inventario.py ─► reporte_inventario.json
-inventario_local.xml  │            ▲
-inventario_local.yaml ┘            │
-                        REST API (HTTPS)  https://api.restful-api.dev/objects
+devops-inventario-red/
+├── data/
+│   ├── config.yaml        # Configuración (API, token, timeout, SSL)
+│   ├── dispositivos.csv    # Inventario en formato CSV
+│   ├── inventario.json     # Inventario en formato JSON
+│   ├── inventario.xml      # Inventario en formato XML
+│   └── inventario.yaml     # Inventario en formato YAML
+└── src/
+    ├── utils.py            # Carga de archivos JSON/CSV/XML/YAML
+    ├── api_client.py       # Cliente REST HTTPS + autenticación Bearer
+    ├── processor.py        # Consolidación, filtrado y resumen
+    └── main.py             # Orquestador principal
 ```
 
 ## Requisitos
@@ -27,34 +27,26 @@ inventario_local.yaml ┘            │
 ## Uso
 
 ```bash
-# Ejecución completa (inventario local + REST API)
-python3 scripts/devops_inventario.py
-
-# Solo datos locales (sin consultar la API)
-python3 scripts/devops_inventario.py --sin-api
-
-# Parámetros disponibles
-python3 scripts/devops_inventario.py --dir . --api-url https://api.restful-api.dev --salida reporte_inventario.json
+python3 -m src.main
 ```
 
-## Buenas prácticas aplicadas
+## Autenticación de la API REST
 
-- Funciones con responsabilidad única y *type hints*.
-- `docstrings` descriptivos en módulo y funciones.
-- Registro de eventos con el módulo `logging`.
-- Manejo de excepciones para E/S de archivos y para la REST API
-  (errores 4xx/5xx, *timeouts* y fallos de conexión).
-- Configuración por línea de comandos con `argparse`.
+El módulo `api_client.py` accede a un endpoint protegido enviando un **token Bearer** en la cabecera `Authorization` sobre HTTPS (con verificación SSL). El cliente maneja de forma controlada:
 
-## Manejo de errores de la REST API
+| Código / Error   | Descripción                                        |
+|------------------|----------------------------------------------------|
+| 200 OK           | Acceso autorizado (token válido)                   |
+| 401 Unauthorized | Autenticación fallida (token ausente o inválido)   |
+| 403 Forbidden    | Token sin permisos                                 |
+| 404 Not Found    | Recurso no encontrado                              |
+| 5xx              | Error del servidor                                 |
+| SSLError / Timeout / ConnectionError | Excepciones de red controladas |
 
-| Situación             | Código | Manejo en el script                |
-|-----------------------|--------|------------------------------------|
-| Petición correcta     | 200    | Procesa el JSON de respuesta       |
-| Recurso inexistente   | 404    | `raise_for_status()` → `HTTPError` |
-| Error del servidor    | 5xx    | `raise_for_status()` → `HTTPError` |
-| Servicio sin respuesta| —      | `Timeout` controlado               |
-| Sin conectividad      | —      | `ConnectionError` controlado       |
+## Ramas
+
+- `main` / `master`: versión estable.
+- `desarrollo`: rama de trabajo (incluye la autenticación de la API).
 
 ## Equipo
 
